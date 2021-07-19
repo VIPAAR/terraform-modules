@@ -9,7 +9,7 @@ variable "name" {
 
 variable "record_set" {
   default = []
-  type    = list(string)
+  type    = list(map(string))
 }
 
 variable "record_set_count" {
