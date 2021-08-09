@@ -81,20 +81,12 @@ resource "aws_launch_configuration" "launch_config" {
   }
   name_prefix       = var.name
   placement_tenancy = var.placement_tenancy
-  dynamic "root_block_device" {
-    for_each = [var.root_block_device]
-    content {
-      # TF-UPGRADE-TODO: The automatic upgrade tool can't predict
-      # which keys might be set in maps assigned here, so it has
-      # produced a comprehensive set here. Consider simplifying
-      # this after confirming which keys can be set in practice.
-
-      delete_on_termination = lookup(root_block_device.value, "delete_on_termination", null)
-      encrypted             = lookup(root_block_device.value, "encrypted", null)
-      iops                  = lookup(root_block_device.value, "iops", null)
-      volume_size           = lookup(root_block_device.value, "volume_size", null)
-      volume_type           = lookup(root_block_device.value, "volume_type", null)
-    }
+  root_block_device {
+    delete_on_termination = lookup(var.root_block_device, "delete_on_termination", null)
+    encrypted             = lookup(var.root_block_device, "encrypted", null)
+    iops                  = lookup(var.root_block_device, "iops", null)
+    volume_size           = lookup(var.root_block_device, "volume_size", null)
+    volume_type           = lookup(var.root_block_device, "volume_type", null)
   }
   security_groups = var.security_groups
   user_data       = var.user_data
