@@ -16,7 +16,7 @@ variable "billing_mode" {
 
 variable "global_secondary_indexes" {
   default = []
-  type    = list(any)
+  type    = any
 }
 
 variable "global_secondary_indexes_count" {
@@ -30,7 +30,7 @@ variable "hash_key" {
 
 variable "local_secondary_indexes" {
   default = []
-  type    = list(any)
+  type    = any
 }
 
 variable "name" {
