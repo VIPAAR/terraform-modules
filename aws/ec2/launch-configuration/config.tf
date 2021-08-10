@@ -41,7 +41,7 @@ resource "aws_iam_instance_profile" "launch_config" {
 resource "aws_launch_configuration" "launch_config" {
   associate_public_ip_address = var.associate_public_ip_address
   dynamic "ebs_block_device" {
-    for_each = [var.ebs_block_devices]
+    for_each = var.ebs_block_devices
     content {
       # TF-UPGRADE-TODO: The automatic upgrade tool can't predict
       # which keys might be set in maps assigned here, so it has
@@ -61,7 +61,7 @@ resource "aws_launch_configuration" "launch_config" {
   ebs_optimized     = contains(local.ebs_optimized_instance_types, var.instance_type)
   enable_monitoring = true
   dynamic "ephemeral_block_device" {
-    for_each = [var.ephemeral_block_devices]
+    for_each = var.ephemeral_block_devices
     content {
       # TF-UPGRADE-TODO: The automatic upgrade tool can't predict
       # which keys might be set in maps assigned here, so it has
