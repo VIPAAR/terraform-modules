@@ -23,7 +23,7 @@ resource "aws_s3_bucket" "remote_state_backend" {
 module "remote_state_backend_bucket_policy" {
   bucket_arn   = aws_s3_bucket.remote_state_backend.arn
   kms_key_arns = [aws_kms_key.remote_state_backend.arn]
-  source       = "github.com/QuiNovas/terraform-modules//aws/secure-bucket-policy?ref=v1.0.13"
+  source       = "github.com/rob-hargraves/terraform-modules//aws/secure-bucket-policy?ref=0.12-upgrade"
 }
 
 resource "aws_s3_bucket_policy" "remote_state_backend" {
