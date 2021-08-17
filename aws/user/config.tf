@@ -132,4 +132,3 @@ resource "aws_iam_user_policy_attachment" "iam_read_only" {
   policy_arn = "arn:aws:iam::aws:policy/IAMReadOnlyAccess"
   user       = aws_iam_user.user.name
 }
-
