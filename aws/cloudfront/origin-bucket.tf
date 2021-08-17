@@ -3,11 +3,6 @@ resource "aws_s3_bucket" "origin" {
   dynamic "cors_rule" {
     for_each = var.origin_bucket_cors
     content {
-      # TF-UPGRADE-TODO: The automatic upgrade tool can't predict
-      # which keys might be set in maps assigned here, so it has
-      # produced a comprehensive set here. Consider simplifying
-      # this after confirming which keys can be set in practice.
-
       allowed_headers = lookup(cors_rule.value, "allowed_headers", null)
       allowed_methods = cors_rule.value.allowed_methods
       allowed_origins = cors_rule.value.allowed_origins

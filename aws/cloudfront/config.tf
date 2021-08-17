@@ -12,11 +12,6 @@ resource "aws_cloudfront_distribution" "distribution" {
   dynamic "custom_error_response" {
     for_each = var.custom_error_responses
     content {
-      # TF-UPGRADE-TODO: The automatic upgrade tool can't predict
-      # which keys might be set in maps assigned here, so it has
-      # produced a comprehensive set here. Consider simplifying
-      # this after confirming which keys can be set in practice.
-
       error_caching_min_ttl = lookup(custom_error_response.value, "error_caching_min_ttl", null)
       error_code            = custom_error_response.value.error_code
       response_code         = lookup(custom_error_response.value, "response_code", null)
@@ -64,11 +59,6 @@ resource "aws_cloudfront_distribution" "distribution" {
   dynamic "ordered_cache_behavior" {
     for_each = var.ordered_cache_behaviors
     content {
-      # TF-UPGRADE-TODO: The automatic upgrade tool can't predict
-      # which keys might be set in maps assigned here, so it has
-      # produced a comprehensive set here. Consider simplifying
-      # this after confirming which keys can be set in practice.
-
       allowed_methods           = ordered_cache_behavior.value.allowed_methods
       cached_methods            = ordered_cache_behavior.value.cached_methods
       compress                  = lookup(ordered_cache_behavior.value, "compress", null)
@@ -119,11 +109,6 @@ resource "aws_cloudfront_distribution" "distribution" {
   dynamic "origin" {
     for_each = var.extra_origins
     content {
-      # TF-UPGRADE-TODO: The automatic upgrade tool can't predict
-      # which keys might be set in maps assigned here, so it has
-      # produced a comprehensive set here. Consider simplifying
-      # this after confirming which keys can be set in practice.
-
       domain_name = origin.value.domain_name
       origin_id   = origin.value.origin_id
       origin_path = lookup(origin.value, "origin_path", null)
