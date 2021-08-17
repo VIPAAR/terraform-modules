@@ -10,11 +10,6 @@ resource "aws_dynamodb_table" "table" {
   dynamic "global_secondary_index" {
     for_each = var.global_secondary_indexes
     content {
-      # TF-UPGRADE-TODO: The automatic upgrade tool can't predict
-      # which keys might be set in maps assigned here, so it has
-      # produced a comprehensive set here. Consider simplifying
-      # this after confirming which keys can be set in practice.
-
       hash_key           = global_secondary_index.value.hash_key
       name               = global_secondary_index.value.name
       non_key_attributes = lookup(global_secondary_index.value, "non_key_attributes", null)
@@ -36,11 +31,6 @@ resource "aws_dynamodb_table" "table" {
   dynamic "local_secondary_index" {
     for_each = var.local_secondary_indexes
     content {
-      # TF-UPGRADE-TODO: The automatic upgrade tool can't predict
-      # which keys might be set in maps assigned here, so it has
-      # produced a comprehensive set here. Consider simplifying
-      # this after confirming which keys can be set in practice.
-
       name               = local_secondary_index.value.name
       non_key_attributes = lookup(local_secondary_index.value, "non_key_attributes", null)
       projection_type    = local_secondary_index.value.projection_type
