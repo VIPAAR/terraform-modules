@@ -32,5 +32,5 @@ module "group" {
   name               = var.name
   allowed_user_names = var.allowed_user_names
   role_arns          = [aws_iam_role.role.arn]
-  source              = "github.com/rob-hargraves/terraform-modules//aws/assume-role-group?ref=0.12-upgrade"
+  source              = "../assume-role-group"
 }
