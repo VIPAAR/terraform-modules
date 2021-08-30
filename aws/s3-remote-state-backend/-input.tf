@@ -1,15 +1,15 @@
 variable "name_prefix" {
-  type = "string"
+  type = string
 }
 
 variable "log_bucket_id" {
-  type = "string"
+  type = string
 }
 
 variable "user_name_count" {
-  type = "string"
+  type = number
 }
 
 variable "user_names" {
-  type = "list"
+  type = list(string)
 }

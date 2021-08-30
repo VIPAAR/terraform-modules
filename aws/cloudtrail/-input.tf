@@ -1,12 +1,12 @@
 variable "account_name" {
-  type = "string"
+  type = string
 }
 
 variable "log_bucket" {
-  type = "string"
+  type = string
 }
 
 variable "cis_benchmark_alerts" {
-  type    = "list"
+  type    = list(string)
   default = []
 }

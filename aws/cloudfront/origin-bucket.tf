@@ -1,11 +1,20 @@
 resource "aws_s3_bucket" "origin" {
-  bucket = "${local.bucket_name}"
-  cors_rule = "${var.origin_bucket_cors}"
+  bucket = local.bucket_name
+  dynamic "cors_rule" {
+    for_each = var.origin_bucket_cors
+    content {
+      allowed_headers = lookup(cors_rule.value, "allowed_headers", null)
+      allowed_methods = cors_rule.value.allowed_methods
+      allowed_origins = cors_rule.value.allowed_origins
+      expose_headers  = lookup(cors_rule.value, "expose_headers", null)
+      max_age_seconds = lookup(cors_rule.value, "max_age_seconds", null)
+    }
+  }
   lifecycle {
     prevent_destroy = true
   }
   logging {
-    target_bucket = "${data.aws_s3_bucket.log_bucket.id}"
+    target_bucket = data.aws_s3_bucket.log_bucket.id
     target_prefix = "s3/${var.distribution_name}/"
   }
   server_side_encryption_configuration {
@@ -15,7 +24,7 @@ resource "aws_s3_bucket" "origin" {
       }
     }
   }
-  tags   = "${local.tags}"
+  tags = local.tags
   versioning {
     enabled = true
   }
@@ -24,48 +33,49 @@ resource "aws_s3_bucket" "origin" {
 data "aws_iam_policy_document" "origin_bucket_policy" {
   statement {
     actions = [
-      "s3:*"
+      "s3:*",
     ]
     condition {
       test = "Bool"
       values = [
-        "false"
+        "false",
       ]
       variable = "aws:SecureTransport"
     }
     effect = "Deny"
     principals {
       identifiers = [
-        "*"
+        "*",
       ]
       type = "AWS"
     }
     resources = [
-      "${aws_s3_bucket.origin.arn}",
-      "${aws_s3_bucket.origin.arn}/*"
+      aws_s3_bucket.origin.arn,
+      "${aws_s3_bucket.origin.arn}/*",
     ]
     sid = "DenyUnsecuredTransport"
   }
   statement {
     actions = [
       "s3:GetObject",
-      "s3:ListBucket"
+      "s3:ListBucket",
     ]
     principals {
       identifiers = [
-        "${aws_cloudfront_origin_access_identity.origin.iam_arn}"
+        aws_cloudfront_origin_access_identity.origin.iam_arn,
       ]
       type = "AWS"
     }
     resources = [
-        "${aws_s3_bucket.origin.arn}",
-        "${aws_s3_bucket.origin.arn}/*"
+      aws_s3_bucket.origin.arn,
+      "${aws_s3_bucket.origin.arn}/*",
     ]
     sid = "AllowCloudFront"
   }
 }
 
 resource "aws_s3_bucket_policy" "origin" {
-  bucket = "${aws_s3_bucket.origin.id}"
-  policy = "${data.aws_iam_policy_document.origin_bucket_policy.json}"
+  bucket = aws_s3_bucket.origin.id
+  policy = data.aws_iam_policy_document.origin_bucket_policy.json
 }
+

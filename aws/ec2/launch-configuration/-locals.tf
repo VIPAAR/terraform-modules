@@ -1,5 +1,5 @@
 locals {
-  ebs_optimized_instance_types  = [
+  ebs_optimized_instance_types = [
     "c1.xlarge",
     "c3.xlarge",
     "c3.2xlarge",
@@ -78,7 +78,7 @@ locals {
     "x1e.4xlarge",
     "x1e.8xlarge",
     "x1e.16xlarge",
-    "x1e.32xlarge"
+    "x1e.32xlarge",
   ]
-  policy_arns_count             = "${var.policy_arns_count}"
+  policy_arns_count = var.policy_arns_count
 }

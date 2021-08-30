@@ -1,42 +1,45 @@
 variable "attributes" {
-  type = "list"
+  type = list(object({
+    name = string
+    type = string
+  }))
 }
 
 variable "autoscaling_service_role_arn" {
-  type = "string"
+  type = string
 }
 
 variable "billing_mode" {
   default = "PROVISIONED"
-  type    = "string"
+  type    = string
 }
 
 variable "global_secondary_indexes" {
   default = []
-  type    = "list"
+  type    = any
 }
 
 variable "global_secondary_indexes_count" {
   default = 0
-  type    = "string"
+  type    = string
 }
 
 variable "hash_key" {
-  type = "string"
+  type = string
 }
 
 variable "local_secondary_indexes" {
   default = []
-  type    = "list"
+  type    = any
 }
 
 variable "name" {
-  type = "string"
+  type = string
 }
 
 variable "pitr_enabled" {
   default = "true"
-  type = "string"
+  type    = string
 }
 
 variable "read_capacity" {
@@ -44,27 +47,27 @@ variable "read_capacity" {
     max = 1
     min = 1
   }
-  type    = "map"
+  type = map(string)
 }
 
 variable "range_key" {
   default = ""
-  type    = "string"
+  type    = string
 }
 
 variable "stream_view_type" {
   default = ""
-  type    = "string"
+  type    = string
 }
 
 variable "tags" {
   default = {}
-  type    = "map"
+  type    = map(string)
 }
 
 variable "ttl_attribute_name" {
   default = ""
-  type    = "string"
+  type    = string
 }
 
 variable "write_capacity" {
@@ -72,5 +75,5 @@ variable "write_capacity" {
     max = 1
     min = 1
   }
-  type    = "map"
+  type = map(string)
 }
