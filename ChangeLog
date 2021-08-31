@@ -1,3 +1,11 @@
+2.0.0
+==========
+2021-08-31  Rob Hargraves <rob.hargraves@helplightning.com> - Merged by Marcus Dillavou  <marcus.dillavou@helplightning.com>
+	* TM-100 - Merge terraform-aws-rds-postges module into terraform-modules
+
+2021-08-30  Marcus Dillavou  <marcus.dillavou@helplightning.com>
+	* TM-97 - Upgrade terraform-modules to 0.12
+
 1.0.29
 ==========
 2021-05-21  Rob Hargraves <rob.hargraves@helplightning.com> - Merged by Marcus Dillavou  <marcus.dillavou@helplightning.com>
