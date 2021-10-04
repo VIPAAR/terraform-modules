@@ -31,6 +31,22 @@ variable "parameters" {
   type        = list(map(string))
 }
 
+variable "performance_insights_enabled" {
+  default     = true
+  description = "Whether or not to enable Performance Insights on the instance."
+  type        = bool
+}
+
+variable "performance_insights_retention_period" {
+  default     = 7
+  description = "The amount of time in days to retain Performance Insights data. Either 7 (7 days) or 731 (2 years)."
+  type        = number
+  validation {
+    condition     = contains([7, 731], var.performance_insights_retention_period)
+    error_message = "Valid choices for Performance Insights retention period are 7 (7 days) or 731 (2 years)."
+  }
+}
+
 variable "subnet_ids" {
   description = "A list of VPC subnet IDs for the aws_db_subnet_group."
   type        = list(string)
