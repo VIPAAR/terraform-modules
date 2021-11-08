@@ -91,6 +91,7 @@ resource "aws_iam_role_policy_attachment" "monitoring" {
 
 resource "aws_db_instance" "rds" {
   allocated_storage          = 100
+  apply_immediately          = var.apply_immediately
   auto_minor_version_upgrade = true
   backup_retention_period    = 7
   backup_window              = "05:00-05:30"

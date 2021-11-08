@@ -1,3 +1,9 @@
+variable "apply_immediately" {
+  default     = false
+  description = "Changes to some db settings can be deferred until the next maintenance window. Setting this to true will instead apply the planned changes immediately."
+  type        = bool
+}
+
 variable "database_name" {
   description = "The name of the database to create when the DB instance is created."
   type        = string
