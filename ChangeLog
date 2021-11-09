@@ -1,3 +1,8 @@
+3.0.0
+==========
+2021-10-07  Rob Hargraves <rob.hargraves@helplightning.com> - Merged by Marcus Dillavou  <marcus.dillavou@helplightning.com>
+	* TM-101 - Upgrade terraform-modules for terraform 0.13 compatibility
+
 2.0.0
 ==========
 2021-08-31  Rob Hargraves <rob.hargraves@helplightning.com> - Merged by Marcus Dillavou  <marcus.dillavou@helplightning.com>
