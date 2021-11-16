@@ -1,3 +1,6 @@
+2021-11-16  Rob Hargraves <rob.hargraves@helplightning.com> - Merged by Marcus Dillavou  <marcus.dillavou@helplightning.com>
+	* TM-92 - Make auto minor version upgrade configurable in RDS Postgres module
+
 3.0.0
 ==========
 2021-10-07  Rob Hargraves <rob.hargraves@helplightning.com> - Merged by Marcus Dillavou  <marcus.dillavou@helplightning.com>
