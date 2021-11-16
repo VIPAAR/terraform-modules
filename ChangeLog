@@ -1,3 +1,5 @@
+3.0.1
+==========
 2021-11-16  Rob Hargraves <rob.hargraves@helplightning.com> - Merged by Marcus Dillavou  <marcus.dillavou@helplightning.com>
 	* TM-107 - Allow postgres changes to be applied immediately in terraform-modules
 	* TM-104 - Add option to enable RDS Performance Insights on RDS postgres module
