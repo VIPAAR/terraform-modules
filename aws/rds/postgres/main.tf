@@ -30,6 +30,22 @@ resource "aws_kms_alias" "rds" {
   target_key_id = aws_kms_key.rds.id
 }
 
+resource "aws_kms_key" "rds_performance_insights" {
+  count = var.performance_insights_enabled ? 1 : 0
+
+  description         = "${var.name}-performance-insights"
+  enable_key_rotation = true
+  is_enabled          = true
+  tags                = local.tags
+}
+
+resource "aws_kms_alias" "rds_performance_insights" {
+  count = var.performance_insights_enabled ? 1 : 0
+
+  name          = "alias/${var.name}-performance-insights"
+  target_key_id = aws_kms_key.rds_performance_insights[0].id
+}
+
 resource "random_string" "master_password" {
   length           = 64
   lower            = true
@@ -105,16 +121,19 @@ resource "aws_db_instance" "rds" {
   lifecycle {
     prevent_destroy = true
   }
-  monitoring_interval  = 60
-  monitoring_role_arn  = aws_iam_role.monitoring.arn
-  multi_az             = true
-  name                 = var.database_name
-  parameter_group_name = aws_db_parameter_group.rds.name
-  password             = random_string.master_password.result
-  storage_encrypted    = true
-  storage_type         = "gp2"
-  tags                 = local.tags
-  username             = var.username
+  monitoring_interval                   = 60
+  monitoring_role_arn                   = aws_iam_role.monitoring.arn
+  multi_az                              = true
+  name                                  = var.database_name
+  parameter_group_name                  = aws_db_parameter_group.rds.name
+  performance_insights_enabled          = var.performance_insights_enabled
+  performance_insights_kms_key_id       = var.performance_insights_enabled ? aws_kms_key.rds_performance_insights[0].arn : null
+  performance_insights_retention_period = var.performance_insights_enabled ? var.performance_insights_retention_period : null
+  password                              = random_string.master_password.result
+  storage_encrypted                     = true
+  storage_type                          = "gp2"
+  tags                                  = local.tags
+  username                              = var.username
   vpc_security_group_ids = [
     aws_security_group.rds.id,
   ]
