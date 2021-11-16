@@ -1,3 +1,9 @@
+variable "apply_immediately" {
+  default     = false
+  description = "Changes to some db settings can be deferred until the next maintenance window. Setting this to true will instead apply the planned changes immediately."
+  type        = bool
+}
+
 variable "auto_minor_version_upgrade" {
   default     = true
   description = "Whether to automatically apply minor version upgrades during the maintenance window."
