@@ -1,3 +1,29 @@
+3.0.1
+==========
+2021-11-16  Rob Hargraves <rob.hargraves@helplightning.com> - Merged by Marcus Dillavou  <marcus.dillavou@helplightning.com>
+	* TM-107 - Allow postgres changes to be applied immediately in terraform-modules
+	* TM-104 - Add option to enable RDS Performance Insights on RDS postgres module
+	* TM-92 - Make auto minor version upgrade configurable in RDS Postgres module
+
+3.0.0
+==========
+2021-10-07  Rob Hargraves <rob.hargraves@helplightning.com> - Merged by Marcus Dillavou  <marcus.dillavou@helplightning.com>
+	* TM-101 - Upgrade terraform-modules for terraform 0.13 compatibility
+
+2.0.0
+==========
+2021-08-31  Rob Hargraves <rob.hargraves@helplightning.com> - Merged by Marcus Dillavou  <marcus.dillavou@helplightning.com>
+	* TM-100 - Merge terraform-aws-rds-postges module into terraform-modules
+
+2021-08-30  Marcus Dillavou  <marcus.dillavou@helplightning.com>
+	* TM-97 - Upgrade terraform-modules to 0.12
+
+1.0.29
+==========
+2021-05-21  Rob Hargraves <rob.hargraves@helplightning.com> - Merged by Marcus Dillavou  <marcus.dillavou@helplightning.com>
+	* TM-84 - In the cloudfront module, fix lambda@edge permissions when operating in a different region than us-east-1
+	* TM-83 - Update S3 permissions in the log-bucket module to allow network lb's to write logs
+
 1.0.28
 ==========
 2020-12-14  Rob Hargraves <rob.hargraves@helplightning.com> - Merged by Marcus Dillavou  <marcus.dillavou@helplightning.com>

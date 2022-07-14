@@ -1,12 +1,12 @@
 data "aws_iam_policy_document" "redirector_assume_role" {
   statement {
     actions = [
-      "sts:AssumeRole"
+      "sts:AssumeRole",
     ]
     principals {
       identifiers = [
         "lambda.amazonaws.com",
-        "edgelambda.amazonaws.com"
+        "edgelambda.amazonaws.com",
       ]
       type = "Service"
     }
@@ -19,8 +19,8 @@ provider "aws" {
 }
 
 resource "aws_iam_role" "redirector" {
-  assume_role_policy  = "${data.aws_iam_policy_document.redirector_assume_role.json}"
-  name                = "${var.distribution_name}-default-index-redirector"
+  assume_role_policy = data.aws_iam_policy_document.redirector_assume_role.json
+  name               = "${var.distribution_name}-default-index-redirector"
 }
 
 resource "aws_cloudwatch_log_group" "redirector_log_group" {
@@ -32,44 +32,46 @@ data "aws_iam_policy_document" "redirector" {
   statement {
     actions = [
       "logs:CreateLogStream",
-      "logs:PutLogEvents"
+      "logs:PutLogEvents",
     ]
     resources = [
-      "${aws_cloudwatch_log_group.redirector_log_group.arn}"
+      aws_cloudwatch_log_group.redirector_log_group.arn,
     ]
-    sid       = "AllowLogCreation"
+    sid = "AllowLogCreation"
   }
 }
 
 resource "aws_iam_role_policy" "redirector" {
-  name    = "${var.distribution_name}-default-index-redirector"
-  policy  = "${data.aws_iam_policy_document.redirector.json}"
-  role    = "${aws_iam_role.redirector.id}"
+  name   = "${var.distribution_name}-default-index-redirector"
+  policy = data.aws_iam_policy_document.redirector.json
+  role   = aws_iam_role.redirector.id
 }
 
 resource "aws_lambda_function" "redirector" {
-  filename          = "${path.module}/default-index-redirect/function.zip"
-  function_name     = "${var.distribution_name}-default-index-redirector"
-  handler           = "function.handler"
+  filename      = "${path.module}/default-index-redirect/function.zip"
+  function_name = "${var.distribution_name}-default-index-redirector"
+  handler       = "function.handler"
   lifecycle {
     ignore_changes = [
-      "filename",
-      "last_modified",
-      "qualified_arn",
-      "version"
+      filename,
+      last_modified,
+      qualified_arn,
+      version,
     ]
   }
-  provider          = "aws.lambda_edge_region"
-  publish           = true
-  role              = "${aws_iam_role.redirector.arn}"
-  runtime           = "nodejs12.x"
-  source_code_hash  = "${base64sha256(file("${path.module}/default-index-redirect/function.zip"))}"
-  tags              = "${local.tags}"
+  provider         = aws.lambda_edge_region
+  publish          = true
+  role             = aws_iam_role.redirector.arn
+  runtime          = "nodejs12.x"
+  source_code_hash = filebase64sha256("${path.module}/default-index-redirect/function.zip")
+  tags             = local.tags
 }
 
 resource "aws_lambda_permission" "redirector" {
   action        = "lambda:GetFunction"
-  function_name = "${aws_lambda_function.redirector.function_name}"
+  function_name = aws_lambda_function.redirector.function_name
   principal     = "edgelambda.amazonaws.com"
+  provider      = aws.lambda_edge_region
   statement_id  = "AllowExecutionFromCloudFront"
 }
+

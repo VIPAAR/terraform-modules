@@ -1,11 +1,11 @@
 variable "allowed_user_names" {
-  type = "list"
+  type = list(string)
 }
 
 variable "name" {
-  type = "string"
+  type = string
 }
 
 variable "role_arns" {
-  type = "list"
+  type = list(string)
 }

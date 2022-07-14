@@ -1,7 +1,7 @@
 variable "bucket_arn" {
-  type = "string"
+  type = string
 }
 
 variable "kms_key_arns" {
-  type = "list"
+  type = list(string)
 }
