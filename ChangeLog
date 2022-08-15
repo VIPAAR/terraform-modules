@@ -1,3 +1,6 @@
+2022-08-15  Rob Hargraves <rob.hargraves@helplightning.com> - Merged by Marcus Dillavou  <marcus.dillavou@helplightning.com>
+	* TM-73 - Output the cloudwatch log group name in the cloudtrail module
+
 3.0.1
 ==========
 2021-11-16  Rob Hargraves <rob.hargraves@helplightning.com> - Merged by Marcus Dillavou  <marcus.dillavou@helplightning.com>
