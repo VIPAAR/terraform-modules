@@ -1,3 +1,5 @@
+3.0.2
+==========
 2022-08-15  Rob Hargraves <rob.hargraves@helplightning.com> - Merged by Marcus Dillavou  <marcus.dillavou@helplightning.com>
 	* TER-1 - Replace AWSConfigRole AWS policy with new AWS_ConfigRole policy in affected modules
 	* TM-73 - Output the cloudwatch log group name in the cloudtrail module
