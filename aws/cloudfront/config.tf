@@ -39,6 +39,13 @@ resource "aws_cloudfront_distribution" "distribution" {
       event_type = "origin-request"
       lambda_arn = aws_lambda_function.redirector.qualified_arn
     }
+    dynamic "lambda_function_association" {
+      for_each = length(var.custom_response_headers) == 0 ? [] : [1]
+      content {
+        event_type = "origin-response"
+        lambda_arn = aws_lambda_function.response_headers[0].qualified_arn
+      }
+    }
     max_ttl                = 86400
     min_ttl                = 0
     target_origin_id       = var.distribution_name
