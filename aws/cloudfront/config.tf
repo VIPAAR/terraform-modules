@@ -55,9 +55,6 @@ resource "aws_cloudfront_distribution" "distribution" {
   depends_on          = [aws_lambda_permission.redirector]
   enabled             = var.enabled
   is_ipv6_enabled     = true
-  lifecycle {
-    ignore_changes = [default_cache_behavior]
-  }
   logging_config {
     bucket          = data.aws_s3_bucket.log_bucket.bucket_domain_name
     include_cookies = false
