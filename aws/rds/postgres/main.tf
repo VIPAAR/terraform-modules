@@ -106,19 +106,20 @@ resource "aws_iam_role_policy_attachment" "monitoring" {
 }
 
 resource "aws_db_instance" "rds" {
-  allocated_storage          = 100
-  apply_immediately          = var.apply_immediately
-  auto_minor_version_upgrade = var.auto_minor_version_upgrade
-  backup_retention_period    = 7
-  backup_window              = "05:00-05:30"
-  copy_tags_to_snapshot      = true
-  db_subnet_group_name       = aws_db_subnet_group.rds.name
-  engine                     = "postgres"
-  engine_version             = var.engine_version
-  final_snapshot_identifier  = "${local.instance_name}-final"
-  identifier                 = local.instance_name
-  instance_class             = var.instance_class
-  kms_key_id                 = aws_kms_key.rds.arn
+  allocated_storage           = 100
+  allow_major_version_upgrade = var.allow_major_version_upgrade
+  apply_immediately           = var.apply_immediately
+  auto_minor_version_upgrade  = var.auto_minor_version_upgrade
+  backup_retention_period     = 7
+  backup_window               = "05:00-05:30"
+  copy_tags_to_snapshot       = true
+  db_subnet_group_name        = aws_db_subnet_group.rds.name
+  engine                      = "postgres"
+  engine_version              = var.engine_version
+  final_snapshot_identifier   = "${local.instance_name}-final"
+  identifier                  = local.instance_name
+  instance_class              = var.instance_class
+  kms_key_id                  = aws_kms_key.rds.arn
   lifecycle {
     prevent_destroy = true
   }
