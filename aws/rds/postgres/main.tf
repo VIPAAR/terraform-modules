@@ -5,8 +5,8 @@ resource "aws_db_subnet_group" "rds" {
 }
 
 resource "aws_db_parameter_group" "rds" {
-  family = "postgres10"
-  name   = "${var.name}-postgres10"
+  family = "postgres${split(".", var.engine_version)[0]}"
+  name   = "${var.name}-postgres${split(".", var.engine_version)[0]}"
   dynamic "parameter" {
     for_each = var.parameters
     content {
@@ -16,6 +16,10 @@ resource "aws_db_parameter_group" "rds" {
     }
   }
   tags = local.tags
+
+  lifecycle {
+    create_before_destroy = true
+  }
 }
 
 resource "aws_kms_key" "rds" {
