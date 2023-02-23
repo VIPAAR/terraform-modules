@@ -25,6 +25,14 @@ resource "aws_s3_bucket" "config" {
     target_bucket = var.log_bucket
     target_prefix = "s3/${var.account_name}-config/"
   }
+
+  server_side_encryption_configuration {
+    rule {
+      apply_server_side_encryption_by_default {
+        sse_algorithm = "AES256"
+      }
+    }
+  }
 }
 
 data "aws_iam_policy_document" "config" {
