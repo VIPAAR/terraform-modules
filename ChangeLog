@@ -1,3 +1,6 @@
+2023-02-28  Rob Hargraves <rob.hargraves@helplightning.com> - Merged by Marcus Dillavou  <marcus.dillavou@helplightning.com>
+	* TER-4 - aws/ec2/launch-config: output the instance role arn
+
 3.0.3
 ==========
 2023-02-24  Rob Hargraves <rob.hargraves@helplightning.com> - Merged by Marcus Dillavou  <marcus.dillavou@helplightning.com>
