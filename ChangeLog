@@ -1,3 +1,8 @@
+3.0.3
+==========
+2023-02-24  Rob Hargraves <rob.hargraves@helplightning.com> - Merged by Marcus Dillavou  <marcus.dillavou@helplightning.com>
+	* TER-6 - Enable server side encryption by default in the config, cloudtrail, and log-bucket modules
+
 3.0.2
 ==========
 2022-08-15  Rob Hargraves <rob.hargraves@helplightning.com> - Merged by Marcus Dillavou  <marcus.dillavou@helplightning.com>
