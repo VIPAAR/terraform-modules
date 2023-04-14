@@ -1,3 +1,9 @@
+variable "allow_major_version_upgrade" {
+  default     = false
+  description = "Whether or not to allow upgrading between major version."
+  type        = bool
+}
+
 variable "apply_immediately" {
   default     = false
   description = "Changes to some db settings can be deferred until the next maintenance window. Setting this to true will instead apply the planned changes immediately."
