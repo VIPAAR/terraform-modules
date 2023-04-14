@@ -1,3 +1,6 @@
+2023-04-14  Rob Hargraves <rob.hargraves@helplightning.com> - Merged by Marcus Dillavou  <marcus.dillavou@helplightning.com>
+	* TER-5 - aws/rds/postgres: Changes to allow a major version upgrade
+
 3.0.4
 ==========
 2023-02-28  Rob Hargraves <rob.hargraves@helplightning.com> - Merged by Marcus Dillavou  <marcus.dillavou@helplightning.com>
