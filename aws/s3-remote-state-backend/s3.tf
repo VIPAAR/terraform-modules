@@ -2,10 +2,9 @@ resource "aws_s3_bucket" "remote_state_backend" {
   bucket = "${var.name_prefix}-remote-state-backend"
   lifecycle {
     prevent_destroy = true
-  }
-  logging {
-    target_bucket = var.log_bucket_id
-    target_prefix = "s3/${var.name_prefix}-remote-state-backend/"
+    ignore_changes = [
+      logging,
+    ]
   }
   server_side_encryption_configuration {
     rule {
@@ -18,6 +17,13 @@ resource "aws_s3_bucket" "remote_state_backend" {
   versioning {
     enabled = true
   }
+}
+
+resource "aws_s3_bucket_logging" "remote_state_backend" {
+  bucket = aws_s3_bucket.remote_state_backend.id
+
+  target_bucket = var.log_bucket_id
+  target_prefix = "s3/${var.name_prefix}-remote-state-backend/"
 }
 
 module "remote_state_backend_bucket_policy" {
