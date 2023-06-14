@@ -1,5 +1,4 @@
 resource "aws_s3_bucket" "cloudtrail" {
-  acl    = "log-delivery-write"
   bucket = "${var.account_name}-cloudtrail"
 
   lifecycle_rule {
@@ -24,6 +23,9 @@ resource "aws_s3_bucket" "cloudtrail" {
   logging {
     target_bucket = var.log_bucket
     target_prefix = "s3/${var.account_name}-cloudtrail/"
+    ignore_changes = [
+      grant,
+    ]
   }
 
   server_side_encryption_configuration {
@@ -33,6 +35,19 @@ resource "aws_s3_bucket" "cloudtrail" {
       }
     }
   }
+}
+
+resource "aws_s3_bucket_ownership_controls" "cloudtrail" {
+  bucket = aws_s3_bucket.cloudtrail.id
+
+  rule {
+    object_ownership = "ObjectWriter"
+  }
+}
+
+resource "aws_s3_bucket_acl" "cloudtrail" {
+  bucket = aws_s3_bucket.cloudtrail.id
+  acl    = "log-delivery-write"
 }
 
 data "aws_iam_policy_document" "cloudtrail_s3" {
