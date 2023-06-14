@@ -1,5 +1,4 @@
 resource "aws_s3_bucket" "config" {
-  acl    = "log-delivery-write"
   bucket = "${var.account_name}-config"
 
   lifecycle_rule {
@@ -19,6 +18,9 @@ resource "aws_s3_bucket" "config" {
 
   lifecycle {
     prevent_destroy = true
+    ignore_changes = [
+      grant,
+    ]
   }
 
   logging {
@@ -33,6 +35,19 @@ resource "aws_s3_bucket" "config" {
       }
     }
   }
+}
+
+resource "aws_s3_bucket_ownership_controls" "config" {
+  bucket = aws_s3_bucket.config.id
+
+  rule {
+    object_ownership = "ObjectWriter"
+  }
+}
+
+resource "aws_s3_bucket_acl" "config" {
+  bucket = aws_s3_bucket.config.id
+  acl    = "log-delivery-write"
 }
 
 data "aws_iam_policy_document" "config" {
