@@ -30,15 +30,29 @@ resource "aws_s3_bucket" "log" {
   }
 }
 
+resource "aws_s3_bucket_public_access_block" "log" {
+  bucket = aws_s3_bucket.log.id
+
+  block_public_acls       = false
+  block_public_policy     = false
+  ignore_public_acls      = false
+  restrict_public_buckets = false
+}
+
 resource "aws_s3_bucket_ownership_controls" "log" {
   bucket = aws_s3_bucket.log.id
 
   rule {
-    object_ownership = "ObjectWriter"
+    object_ownership = "BucketOwnerPreferred"
   }
 }
 
 resource "aws_s3_bucket_acl" "log" {
+  depends_on = [
+    aws_s3_bucket_public_access_block.log,
+    aws_s3_bucket_ownership_controls.log,
+  ]
+
   bucket = aws_s3_bucket.log.id
   acl    = "log-delivery-write"
 }
