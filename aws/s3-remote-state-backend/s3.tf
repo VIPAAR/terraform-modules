@@ -6,14 +6,6 @@ resource "aws_s3_bucket" "remote_state_backend" {
       logging,
     ]
   }
-  server_side_encryption_configuration {
-    rule {
-      apply_server_side_encryption_by_default {
-        kms_master_key_id = aws_kms_key.remote_state_backend.arn
-        sse_algorithm     = "aws:kms"
-      }
-    }
-  }
 }
 
 resource "aws_s3_bucket_logging" "remote_state_backend" {
@@ -28,6 +20,17 @@ resource "aws_s3_bucket_versioning" "remote_state_backend" {
 
   versioning_configuration {
     status = "Enabled"
+  }
+}
+
+resource "aws_s3_bucket_server_side_encryption_configuration" "remote_state_backend" {
+  bucket = aws_s3_bucket.remote_state_backend.id
+
+  rule {
+    apply_server_side_encryption_by_default {
+      kms_master_key_id = aws_kms_key.remote_state_backend.arn
+      sse_algorithm     = "aws:kms"
+    }
   }
 }
 

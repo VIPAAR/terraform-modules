@@ -23,15 +23,6 @@ resource "aws_s3_bucket" "config" {
       logging,
     ]
   }
-
-
-  server_side_encryption_configuration {
-    rule {
-      apply_server_side_encryption_by_default {
-        sse_algorithm = "AES256"
-      }
-    }
-  }
 }
 
 resource "aws_s3_bucket_logging" "config" {
@@ -39,6 +30,16 @@ resource "aws_s3_bucket_logging" "config" {
 
   target_bucket = var.log_bucket
   target_prefix = "s3/${var.account_name}-config/"
+}
+
+resource "aws_s3_bucket_server_side_encryption_configuration" "config" {
+  bucket = aws_s3_bucket.config.id
+
+  rule {
+    apply_server_side_encryption_by_default {
+      sse_algorithm = "AES256"
+    }
+  }
 }
 
 data "aws_iam_policy_document" "config" {
