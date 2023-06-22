@@ -1,5 +1,4 @@
 resource "aws_s3_bucket" "config" {
-  acl    = "log-delivery-write"
   bucket = "${var.account_name}-config"
 
   lifecycle_rule {
@@ -21,6 +20,7 @@ resource "aws_s3_bucket" "config" {
     prevent_destroy = true
     ignore_changes = [
       logging,
+      grant,
     ]
   }
 
@@ -39,6 +39,33 @@ resource "aws_s3_bucket_logging" "config" {
 
   target_bucket = var.log_bucket
   target_prefix = "s3/${var.account_name}-config/"
+}
+
+resource "aws_s3_bucket_public_access_block" "config" {
+  bucket = aws_s3_bucket.config.id
+
+  block_public_acls       = false
+  block_public_policy     = false
+  ignore_public_acls      = false
+  restrict_public_buckets = false
+}
+
+resource "aws_s3_bucket_ownership_controls" "config" {
+  bucket = aws_s3_bucket.config.id
+
+  rule {
+    object_ownership = "BucketOwnerPreferred"
+  }
+}
+
+resource "aws_s3_bucket_acl" "config" {
+  depends_on = [
+    aws_s3_bucket_public_access_block.config,
+    aws_s3_bucket_ownership_controls.config,
+  ]
+
+  bucket = aws_s3_bucket.config.id
+  acl    = "log-delivery-write"
 }
 
 data "aws_iam_policy_document" "config" {

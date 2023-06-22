@@ -1,8 +1,10 @@
 resource "aws_s3_bucket" "log" {
   bucket = "${var.name_prefix}-log"
-  acl    = "log-delivery-write"
   lifecycle {
     prevent_destroy = true
+    ignore_changes = [
+      grant,
+    ]
   }
   lifecycle_rule {
     id      = "log"
@@ -26,6 +28,33 @@ resource "aws_s3_bucket" "log" {
       }
     }
   }
+}
+
+resource "aws_s3_bucket_public_access_block" "log" {
+  bucket = aws_s3_bucket.log.id
+
+  block_public_acls       = false
+  block_public_policy     = false
+  ignore_public_acls      = false
+  restrict_public_buckets = false
+}
+
+resource "aws_s3_bucket_ownership_controls" "log" {
+  bucket = aws_s3_bucket.log.id
+
+  rule {
+    object_ownership = "BucketOwnerPreferred"
+  }
+}
+
+resource "aws_s3_bucket_acl" "log" {
+  depends_on = [
+    aws_s3_bucket_public_access_block.log,
+    aws_s3_bucket_ownership_controls.log,
+  ]
+
+  bucket = aws_s3_bucket.log.id
+  acl    = "log-delivery-write"
 }
 
 data "aws_elb_service_account" "main" {}
