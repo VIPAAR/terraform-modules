@@ -23,14 +23,6 @@ resource "aws_s3_bucket" "cloudtrail" {
       grant,
     ]
   }
-
-  server_side_encryption_configuration {
-    rule {
-      apply_server_side_encryption_by_default {
-        sse_algorithm = "AES256"
-      }
-    }
-  }
 }
 
 resource "aws_s3_bucket_logging" "cloudtrail" {
@@ -65,6 +57,16 @@ resource "aws_s3_bucket_acl" "cloudtrail" {
 
   bucket = aws_s3_bucket.cloudtrail.id
   acl    = "log-delivery-write"
+}
+
+resource "aws_s3_bucket_server_side_encryption_configuration" "cloudtrail" {
+  bucket = aws_s3_bucket.cloudtrail.id
+
+  rule {
+    apply_server_side_encryption_by_default {
+      sse_algorithm = "AES256"
+    }
+  }
 }
 
 data "aws_iam_policy_document" "cloudtrail_s3" {

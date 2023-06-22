@@ -23,15 +23,6 @@ resource "aws_s3_bucket" "config" {
       grant,
     ]
   }
-
-
-  server_side_encryption_configuration {
-    rule {
-      apply_server_side_encryption_by_default {
-        sse_algorithm = "AES256"
-      }
-    }
-  }
 }
 
 resource "aws_s3_bucket_logging" "config" {
@@ -66,6 +57,16 @@ resource "aws_s3_bucket_acl" "config" {
 
   bucket = aws_s3_bucket.config.id
   acl    = "log-delivery-write"
+}
+
+resource "aws_s3_bucket_server_side_encryption_configuration" "config" {
+  bucket = aws_s3_bucket.config.id
+
+  rule {
+    apply_server_side_encryption_by_default {
+      sse_algorithm = "AES256"
+    }
+  }
 }
 
 data "aws_iam_policy_document" "config" {
