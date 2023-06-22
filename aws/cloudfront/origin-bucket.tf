@@ -12,10 +12,9 @@ resource "aws_s3_bucket" "origin" {
   }
   lifecycle {
     prevent_destroy = true
-  }
-  logging {
-    target_bucket = data.aws_s3_bucket.log_bucket.id
-    target_prefix = "s3/${var.distribution_name}/"
+    ignore_changes = [
+      logging,
+    ]
   }
   server_side_encryption_configuration {
     rule {
@@ -28,6 +27,13 @@ resource "aws_s3_bucket" "origin" {
   versioning {
     enabled = true
   }
+}
+
+resource "aws_s3_bucket_logging" "origin" {
+  bucket = aws_s3_bucket.origin.id
+
+  target_bucket = data.aws_s3_bucket.log_bucket.id
+  target_prefix = "s3/${var.distribution_name}/"
 }
 
 data "aws_iam_policy_document" "origin_bucket_policy" {

@@ -19,12 +19,11 @@ resource "aws_s3_bucket" "config" {
 
   lifecycle {
     prevent_destroy = true
+    ignore_changes = [
+      logging,
+    ]
   }
 
-  logging {
-    target_bucket = var.log_bucket
-    target_prefix = "s3/${var.account_name}-config/"
-  }
 
   server_side_encryption_configuration {
     rule {
@@ -33,6 +32,13 @@ resource "aws_s3_bucket" "config" {
       }
     }
   }
+}
+
+resource "aws_s3_bucket_logging" "config" {
+  bucket = aws_s3_bucket.config.id
+
+  target_bucket = var.log_bucket
+  target_prefix = "s3/${var.account_name}-config/"
 }
 
 data "aws_iam_policy_document" "config" {

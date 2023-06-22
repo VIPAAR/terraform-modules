@@ -19,11 +19,9 @@ resource "aws_s3_bucket" "cloudtrail" {
 
   lifecycle {
     prevent_destroy = true
-  }
-
-  logging {
-    target_bucket = var.log_bucket
-    target_prefix = "s3/${var.account_name}-cloudtrail/"
+    ignore_changes = [
+      logging,
+    ]
   }
 
   server_side_encryption_configuration {
@@ -33,6 +31,13 @@ resource "aws_s3_bucket" "cloudtrail" {
       }
     }
   }
+}
+
+resource "aws_s3_bucket_logging" "cloudtrail" {
+  bucket = aws_s3_bucket.cloudtrail.id
+
+  target_bucket = var.log_bucket
+  target_prefix = "s3/${var.account_name}-cloudtrail/"
 }
 
 data "aws_iam_policy_document" "cloudtrail_s3" {
