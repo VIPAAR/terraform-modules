@@ -24,9 +24,6 @@ resource "aws_s3_bucket" "origin" {
     }
   }
   tags = local.tags
-  versioning {
-    enabled = true
-  }
 }
 
 resource "aws_s3_bucket_logging" "origin" {
@@ -34,6 +31,14 @@ resource "aws_s3_bucket_logging" "origin" {
 
   target_bucket = data.aws_s3_bucket.log_bucket.id
   target_prefix = "s3/${var.distribution_name}/"
+}
+
+resource "aws_s3_bucket_versioning" "origin" {
+  bucket = aws_s3_bucket.origin.id
+
+  versioning_configuration {
+    status = "Enabled"
+  }
 }
 
 data "aws_iam_policy_document" "origin_bucket_policy" {
