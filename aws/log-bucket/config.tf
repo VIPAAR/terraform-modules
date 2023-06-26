@@ -16,7 +16,7 @@ resource "aws_s3_bucket_lifecycle_configuration" "log" {
   rule {
     id      = "log"
     prefix  = "/"
-    enabled = true
+    status  = "Enabled"
 
     transition {
       days          = 30
