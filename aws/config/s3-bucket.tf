@@ -21,6 +21,7 @@ resource "aws_s3_bucket" "config" {
     ignore_changes = [
       logging,
       grant,
+      server_side_encryption_configuration,
     ]
   }
 }

@@ -4,6 +4,7 @@ resource "aws_s3_bucket" "log" {
     prevent_destroy = true
     ignore_changes = [
       grant,
+      server_side_encryption_configuration,
     ]
   }
   lifecycle_rule {
