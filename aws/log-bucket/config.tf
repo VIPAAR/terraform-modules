@@ -5,9 +5,15 @@ resource "aws_s3_bucket" "log" {
     ignore_changes = [
       grant,
       server_side_encryption_configuration,
+      lifecycle_rule,
     ]
   }
-  lifecycle_rule {
+}
+
+resource "aws_s3_bucket_lifecycle_configuration" "log" {
+  bucket = aws_s3_bucket.log.id
+
+  rule {
     id      = "log"
     prefix  = "/"
     enabled = true
