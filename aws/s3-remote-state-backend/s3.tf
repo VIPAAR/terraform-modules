@@ -4,6 +4,7 @@ resource "aws_s3_bucket" "remote_state_backend" {
     prevent_destroy = true
     ignore_changes = [
       logging,
+      server_side_encryption_configuration,
     ]
   }
 }

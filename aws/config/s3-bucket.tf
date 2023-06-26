@@ -21,6 +21,7 @@ resource "aws_s3_bucket" "config" {
     prevent_destroy = true
     ignore_changes = [
       logging,
+      server_side_encryption_configuration,
     ]
   }
 }

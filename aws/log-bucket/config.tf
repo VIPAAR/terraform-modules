@@ -3,6 +3,9 @@ resource "aws_s3_bucket" "log" {
   acl    = "log-delivery-write"
   lifecycle {
     prevent_destroy = true
+    ignore_changes = [
+      server_side_encryption_configuration,
+    ]
   }
   lifecycle_rule {
     id      = "log"
