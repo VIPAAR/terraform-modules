@@ -33,9 +33,12 @@ resource "aws_s3_bucket_lifecycle_configuration" "cloudtrail" {
   bucket = aws_s3_bucket.cloudtrail.id
 
   rule {
-    id      = "log"
-    prefix  = "/"
-    status  = "Enabled"
+    id     = "log"
+    status = "Enabled"
+
+    filter {
+      prefix = "/"
+    }
 
     transition {
       days          = 30
