@@ -20,6 +20,7 @@ resource "aws_s3_bucket" "config" {
     prevent_destroy = true
     ignore_changes = [
       grant,
+      acl,
     ]
   }
 

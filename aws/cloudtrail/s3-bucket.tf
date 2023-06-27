@@ -25,6 +25,7 @@ resource "aws_s3_bucket" "cloudtrail" {
     target_prefix = "s3/${var.account_name}-cloudtrail/"
     ignore_changes = [
       grant,
+      acl,
     ]
   }
 
