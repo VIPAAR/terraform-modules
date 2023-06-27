@@ -1,20 +1,11 @@
 resource "aws_s3_bucket" "origin" {
   bucket = local.bucket_name
-  dynamic "cors_rule" {
-    for_each = var.origin_bucket_cors
-    content {
-      allowed_headers = lookup(cors_rule.value, "allowed_headers", null)
-      allowed_methods = cors_rule.value.allowed_methods
-      allowed_origins = cors_rule.value.allowed_origins
-      expose_headers  = lookup(cors_rule.value, "expose_headers", null)
-      max_age_seconds = lookup(cors_rule.value, "max_age_seconds", null)
-    }
-  }
   lifecycle {
     prevent_destroy = true
     ignore_changes = [
       logging,
       server_side_encryption_configuration,
+      cors_rule,
     ]
   }
   tags = local.tags
@@ -41,6 +32,23 @@ resource "aws_s3_bucket_server_side_encryption_configuration" "origin" {
   rule {
     apply_server_side_encryption_by_default {
       sse_algorithm = "AES256"
+    }
+  }
+}
+
+resource "aws_s3_bucket_cors_configuration" "origin" {
+  count = length(var.origin_bucket_cors) > 0 ? 1 : 0
+
+  bucket = aws_s3_bucket.origin.bucket
+
+  dynamic "cors_rule" {
+    for_each = var.origin_bucket_cors
+    content {
+      allowed_headers = lookup(cors_rule.value, "allowed_headers", null)
+      allowed_methods = cors_rule.value.allowed_methods
+      allowed_origins = cors_rule.value.allowed_origins
+      expose_headers  = lookup(cors_rule.value, "expose_headers", null)
+      max_age_seconds = lookup(cors_rule.value, "max_age_seconds", null)
     }
   }
 }
