@@ -2,12 +2,6 @@ resource "aws_s3_bucket" "log" {
   bucket = "${var.name_prefix}-log"
   lifecycle {
     prevent_destroy = true
-    ignore_changes = [
-      grant,
-      acl,
-      server_side_encryption_configuration,
-      lifecycle_rule,
-    ]
   }
 }
 

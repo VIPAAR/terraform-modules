@@ -2,10 +2,6 @@ resource "aws_s3_bucket" "remote_state_backend" {
   bucket = "${var.name_prefix}-remote-state-backend"
   lifecycle {
     prevent_destroy = true
-    ignore_changes = [
-      logging,
-      server_side_encryption_configuration,
-    ]
   }
 }
 
