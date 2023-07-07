@@ -117,6 +117,7 @@ resource "aws_db_instance" "rds" {
   backup_retention_period     = 7
   backup_window               = "05:00-05:30"
   copy_tags_to_snapshot       = true
+  db_name                     = var.database_name
   db_subnet_group_name        = aws_db_subnet_group.rds.name
   engine                      = "postgres"
   engine_version              = var.engine_version
@@ -130,7 +131,6 @@ resource "aws_db_instance" "rds" {
   monitoring_interval                   = 60
   monitoring_role_arn                   = aws_iam_role.monitoring.arn
   multi_az                              = true
-  name                                  = var.database_name
   parameter_group_name                  = aws_db_parameter_group.rds.name
   performance_insights_enabled          = var.performance_insights_enabled
   performance_insights_kms_key_id       = var.performance_insights_enabled ? aws_kms_key.rds_performance_insights[0].arn : null
