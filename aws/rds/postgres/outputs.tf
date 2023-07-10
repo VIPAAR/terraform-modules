@@ -16,5 +16,5 @@ output "security_group_id" {
 
 output "db_id" {
   description = "The ID of the database."
-  value       = aws_db_instance.rds.id
+  value       = aws_db_instance.rds.identifier
 }
