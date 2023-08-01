@@ -1,10 +1,11 @@
 resource "aws_s3_bucket" "cloudtrail" {
-  acl    = "log-delivery-write"
   bucket = "${var.account_name}-cloudtrail"
 
   lifecycle {
     prevent_destroy = true
     ignore_changes = [
+      grant,
+      acl,
       logging,
       server_side_encryption_configuration,
       lifecycle_rule,
@@ -49,6 +50,33 @@ resource "aws_s3_bucket_lifecycle_configuration" "cloudtrail" {
       days = 2555
     }
   }
+}
+
+resource "aws_s3_bucket_public_access_block" "cloudtrail" {
+  bucket = aws_s3_bucket.cloudtrail.id
+
+  block_public_acls       = false
+  block_public_policy     = false
+  ignore_public_acls      = false
+  restrict_public_buckets = false
+}
+
+resource "aws_s3_bucket_ownership_controls" "cloudtrail" {
+  bucket = aws_s3_bucket.cloudtrail.id
+
+  rule {
+    object_ownership = "BucketOwnerPreferred"
+  }
+}
+
+resource "aws_s3_bucket_acl" "cloudtrail" {
+  depends_on = [
+    aws_s3_bucket_public_access_block.cloudtrail,
+    aws_s3_bucket_ownership_controls.cloudtrail,
+  ]
+
+  bucket = aws_s3_bucket.cloudtrail.id
+  acl    = "log-delivery-write"
 }
 
 data "aws_iam_policy_document" "cloudtrail_s3" {
