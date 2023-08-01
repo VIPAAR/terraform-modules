@@ -1,5 +1,46 @@
 resource "aws_s3_bucket" "origin" {
   bucket = local.bucket_name
+  lifecycle {
+    prevent_destroy = true
+    ignore_changes = [
+      logging,
+      server_side_encryption_configuration,
+      cors_rule,
+    ]
+  }
+  tags = local.tags
+}
+
+resource "aws_s3_bucket_logging" "origin" {
+  bucket = aws_s3_bucket.origin.id
+
+  target_bucket = data.aws_s3_bucket.log_bucket.id
+  target_prefix = "s3/${var.distribution_name}/"
+}
+
+resource "aws_s3_bucket_versioning" "origin" {
+  bucket = aws_s3_bucket.origin.id
+
+  versioning_configuration {
+    status = "Enabled"
+  }
+}
+
+resource "aws_s3_bucket_server_side_encryption_configuration" "origin" {
+  bucket = aws_s3_bucket.origin.id
+
+  rule {
+    apply_server_side_encryption_by_default {
+      sse_algorithm = "AES256"
+    }
+  }
+}
+
+resource "aws_s3_bucket_cors_configuration" "origin" {
+  count = length(var.origin_bucket_cors) > 0 ? 1 : 0
+
+  bucket = aws_s3_bucket.origin.bucket
+
   dynamic "cors_rule" {
     for_each = var.origin_bucket_cors
     content {
@@ -9,24 +50,6 @@ resource "aws_s3_bucket" "origin" {
       expose_headers  = lookup(cors_rule.value, "expose_headers", null)
       max_age_seconds = lookup(cors_rule.value, "max_age_seconds", null)
     }
-  }
-  lifecycle {
-    prevent_destroy = true
-  }
-  logging {
-    target_bucket = data.aws_s3_bucket.log_bucket.id
-    target_prefix = "s3/${var.distribution_name}/"
-  }
-  server_side_encryption_configuration {
-    rule {
-      apply_server_side_encryption_by_default {
-        sse_algorithm = "AES256"
-      }
-    }
-  }
-  tags = local.tags
-  versioning {
-    enabled = true
   }
 }
 

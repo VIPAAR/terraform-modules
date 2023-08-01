@@ -1,11 +1,45 @@
 resource "aws_s3_bucket" "config" {
-  acl    = "log-delivery-write"
   bucket = "${var.account_name}-config"
 
-  lifecycle_rule {
-    id      = "log"
-    prefix  = "/"
-    enabled = true
+  lifecycle {
+    prevent_destroy = true
+    ignore_changes = [
+      grant,
+      acl,
+      logging,
+      server_side_encryption_configuration,
+      lifecycle_rule,
+    ]
+  }
+}
+
+resource "aws_s3_bucket_logging" "config" {
+  bucket = aws_s3_bucket.config.id
+
+  target_bucket = var.log_bucket
+  target_prefix = "s3/${var.account_name}-config/"
+}
+
+resource "aws_s3_bucket_server_side_encryption_configuration" "config" {
+  bucket = aws_s3_bucket.config.id
+
+  rule {
+    apply_server_side_encryption_by_default {
+      sse_algorithm = "AES256"
+    }
+  }
+}
+
+resource "aws_s3_bucket_lifecycle_configuration" "config" {
+  bucket = aws_s3_bucket.config.id
+
+  rule {
+    id     = "log"
+    status = "Enabled"
+
+    filter {
+      prefix = "/"
+    }
 
     transition {
       days          = 30
@@ -16,23 +50,33 @@ resource "aws_s3_bucket" "config" {
       days = 2555
     }
   }
+}
 
-  lifecycle {
-    prevent_destroy = true
-  }
+resource "aws_s3_bucket_public_access_block" "config" {
+  bucket = aws_s3_bucket.config.id
 
-  logging {
-    target_bucket = var.log_bucket
-    target_prefix = "s3/${var.account_name}-config/"
-  }
+  block_public_acls       = false
+  block_public_policy     = false
+  ignore_public_acls      = false
+  restrict_public_buckets = false
+}
 
-  server_side_encryption_configuration {
-    rule {
-      apply_server_side_encryption_by_default {
-        sse_algorithm = "AES256"
-      }
-    }
+resource "aws_s3_bucket_ownership_controls" "config" {
+  bucket = aws_s3_bucket.config.id
+
+  rule {
+    object_ownership = "BucketOwnerPreferred"
   }
+}
+
+resource "aws_s3_bucket_acl" "config" {
+  depends_on = [
+    aws_s3_bucket_public_access_block.config,
+    aws_s3_bucket_ownership_controls.config,
+  ]
+
+  bucket = aws_s3_bucket.config.id
+  acl    = "log-delivery-write"
 }
 
 data "aws_iam_policy_document" "config" {

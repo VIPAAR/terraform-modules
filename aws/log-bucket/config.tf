@@ -1,13 +1,26 @@
 resource "aws_s3_bucket" "log" {
   bucket = "${var.name_prefix}-log"
-  acl    = "log-delivery-write"
   lifecycle {
     prevent_destroy = true
+    ignore_changes = [
+      server_side_encryption_configuration,
+      lifecycle_rule,
+      grant,
+      acl,
+    ]
   }
-  lifecycle_rule {
-    id      = "log"
-    prefix  = "/"
-    enabled = true
+}
+
+resource "aws_s3_bucket_lifecycle_configuration" "log" {
+  bucket = aws_s3_bucket.log.id
+
+  rule {
+    id     = "log"
+    status = "Enabled"
+
+    filter {
+      prefix  = "/"
+    }
 
     transition {
       days          = 30
@@ -18,14 +31,43 @@ resource "aws_s3_bucket" "log" {
       days = 2555
     }
   }
+}
 
-  server_side_encryption_configuration {
-    rule {
-      apply_server_side_encryption_by_default {
-        sse_algorithm = "AES256"
-      }
+resource "aws_s3_bucket_server_side_encryption_configuration" "log" {
+  bucket = aws_s3_bucket.log.id
+
+  rule {
+    apply_server_side_encryption_by_default {
+      sse_algorithm = "AES256"
     }
   }
+}
+
+resource "aws_s3_bucket_public_access_block" "log" {
+  bucket = aws_s3_bucket.log.id
+
+  block_public_acls       = false
+  block_public_policy     = false
+  ignore_public_acls      = false
+  restrict_public_buckets = false
+}
+
+resource "aws_s3_bucket_ownership_controls" "log" {
+  bucket = aws_s3_bucket.log.id
+
+  rule {
+    object_ownership = "BucketOwnerPreferred"
+  }
+}
+
+resource "aws_s3_bucket_acl" "log" {
+  depends_on = [
+    aws_s3_bucket_public_access_block.log,
+    aws_s3_bucket_ownership_controls.log,
+  ]
+
+  bucket = aws_s3_bucket.log.id
+  acl    = "log-delivery-write"
 }
 
 data "aws_elb_service_account" "main" {}
