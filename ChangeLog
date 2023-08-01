@@ -1,4 +1,5 @@
 2023-08-01  Rob Hargraves <rob.hargraves@helplightning.com> - Merged by Marcus Dillavou  <marcus.dillavou@helplightning.com>
+	* TER-10 - Make the inspector module work in multiple regions
 	* TER-9 - Fix unsupported version of node.js
 	* TER-8 - Unable to create S3 buckets that use an ACL
 	* TER-7 - Changes for AWS provider version 3 upgrade
