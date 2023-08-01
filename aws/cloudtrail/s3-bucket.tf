@@ -1,10 +1,45 @@
 resource "aws_s3_bucket" "cloudtrail" {
   bucket = "${var.account_name}-cloudtrail"
 
-  lifecycle_rule {
-    id      = "log"
-    prefix  = "/"
-    enabled = true
+  lifecycle {
+    prevent_destroy = true
+    ignore_changes = [
+      grant,
+      acl,
+      logging,
+      server_side_encryption_configuration,
+      lifecycle_rule,
+    ]
+  }
+}
+
+resource "aws_s3_bucket_logging" "cloudtrail" {
+  bucket = aws_s3_bucket.cloudtrail.id
+
+  target_bucket = var.log_bucket
+  target_prefix = "s3/${var.account_name}-cloudtrail/"
+}
+
+resource "aws_s3_bucket_server_side_encryption_configuration" "cloudtrail" {
+  bucket = aws_s3_bucket.cloudtrail.id
+
+  rule {
+    apply_server_side_encryption_by_default {
+      sse_algorithm = "AES256"
+    }
+  }
+}
+
+resource "aws_s3_bucket_lifecycle_configuration" "cloudtrail" {
+  bucket = aws_s3_bucket.cloudtrail.id
+
+  rule {
+    id     = "log"
+    status = "Enabled"
+
+    filter {
+      prefix = "/"
+    }
 
     transition {
       days          = 30
@@ -13,27 +48,6 @@ resource "aws_s3_bucket" "cloudtrail" {
 
     expiration {
       days = 2555
-    }
-  }
-
-  lifecycle {
-    prevent_destroy = true
-  }
-
-  logging {
-    target_bucket = var.log_bucket
-    target_prefix = "s3/${var.account_name}-cloudtrail/"
-    ignore_changes = [
-      grant,
-      acl,
-    ]
-  }
-
-  server_side_encryption_configuration {
-    rule {
-      apply_server_side_encryption_by_default {
-        sse_algorithm = "AES256"
-      }
     }
   }
 }

@@ -53,7 +53,7 @@ resource "aws_kms_alias" "rds_performance_insights" {
 resource "random_string" "master_password" {
   length           = 64
   lower            = true
-  number           = true
+  numeric          = true
   special          = true
   override_special = "!#$%&*()-_=+[]{}<>:?"
   upper            = true
