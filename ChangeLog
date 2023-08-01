@@ -1,3 +1,5 @@
+4.0.0
+==========
 2023-08-01  Rob Hargraves <rob.hargraves@helplightning.com> - Merged by Marcus Dillavou  <marcus.dillavou@helplightning.com>
 	* TER-10 - Make the inspector module work in multiple regions
 	* TER-9 - Fix unsupported version of node.js
