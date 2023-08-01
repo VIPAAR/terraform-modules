@@ -2,10 +2,43 @@ resource "aws_s3_bucket" "config" {
   acl    = "log-delivery-write"
   bucket = "${var.account_name}-config"
 
-  lifecycle_rule {
-    id      = "log"
-    prefix  = "/"
-    enabled = true
+  lifecycle {
+    prevent_destroy = true
+    ignore_changes = [
+      logging,
+      server_side_encryption_configuration,
+      lifecycle_rule,
+    ]
+  }
+}
+
+resource "aws_s3_bucket_logging" "config" {
+  bucket = aws_s3_bucket.config.id
+
+  target_bucket = var.log_bucket
+  target_prefix = "s3/${var.account_name}-config/"
+}
+
+resource "aws_s3_bucket_server_side_encryption_configuration" "config" {
+  bucket = aws_s3_bucket.config.id
+
+  rule {
+    apply_server_side_encryption_by_default {
+      sse_algorithm = "AES256"
+    }
+  }
+}
+
+resource "aws_s3_bucket_lifecycle_configuration" "config" {
+  bucket = aws_s3_bucket.config.id
+
+  rule {
+    id     = "log"
+    status = "Enabled"
+
+    filter {
+      prefix = "/"
+    }
 
     transition {
       days          = 30
@@ -14,23 +47,6 @@ resource "aws_s3_bucket" "config" {
 
     expiration {
       days = 2555
-    }
-  }
-
-  lifecycle {
-    prevent_destroy = true
-  }
-
-  logging {
-    target_bucket = var.log_bucket
-    target_prefix = "s3/${var.account_name}-config/"
-  }
-
-  server_side_encryption_configuration {
-    rule {
-      apply_server_side_encryption_by_default {
-        sse_algorithm = "AES256"
-      }
     }
   }
 }

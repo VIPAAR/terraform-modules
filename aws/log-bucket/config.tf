@@ -3,11 +3,23 @@ resource "aws_s3_bucket" "log" {
   acl    = "log-delivery-write"
   lifecycle {
     prevent_destroy = true
+    ignore_changes = [
+      server_side_encryption_configuration,
+      lifecycle_rule,
+    ]
   }
-  lifecycle_rule {
-    id      = "log"
-    prefix  = "/"
-    enabled = true
+}
+
+resource "aws_s3_bucket_lifecycle_configuration" "log" {
+  bucket = aws_s3_bucket.log.id
+
+  rule {
+    id     = "log"
+    status = "Enabled"
+
+    filter {
+      prefix  = "/"
+    }
 
     transition {
       days          = 30
@@ -18,12 +30,14 @@ resource "aws_s3_bucket" "log" {
       days = 2555
     }
   }
+}
 
-  server_side_encryption_configuration {
-    rule {
-      apply_server_side_encryption_by_default {
-        sse_algorithm = "AES256"
-      }
+resource "aws_s3_bucket_server_side_encryption_configuration" "log" {
+  bucket = aws_s3_bucket.log.id
+
+  rule {
+    apply_server_side_encryption_by_default {
+      sse_algorithm = "AES256"
     }
   }
 }
