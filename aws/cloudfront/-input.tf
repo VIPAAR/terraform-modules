@@ -26,6 +26,11 @@ variable "custom_error_responses" {
   type    = any
 }
 
+variable "custom_response_headers" {
+  default = {}
+  type    = map(string)
+}
+
 variable "default_root_object" {
   default = "index.html"
   type    = string
