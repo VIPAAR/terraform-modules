@@ -1,4 +1,5 @@
 2023-08-16  Rob Hargraves <rob.hargraves@helplightning.com> - Merged by Marcus Dillavou  <marcus.dillavou@helplightning.com>
+	* TER-13 - Don't ignore changes to default cache behavior in the cloudfront module
 	* TER-11 - Changes for AWS provider version 4 upgrade
 
 4.0.0
