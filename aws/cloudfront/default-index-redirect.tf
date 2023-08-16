@@ -54,9 +54,6 @@ resource "aws_lambda_function" "redirector" {
   lifecycle {
     ignore_changes = [
       filename,
-      last_modified,
-      qualified_arn,
-      version,
     ]
   }
   provider         = aws.lambda_edge_region
