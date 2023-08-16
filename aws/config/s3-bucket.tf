@@ -3,13 +3,6 @@ resource "aws_s3_bucket" "config" {
 
   lifecycle {
     prevent_destroy = true
-    ignore_changes = [
-      grant,
-      acl,
-      logging,
-      server_side_encryption_configuration,
-      lifecycle_rule,
-    ]
   }
 }
 

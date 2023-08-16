@@ -1,3 +1,6 @@
+2023-08-16  Rob Hargraves <rob.hargraves@helplightning.com> - Merged by Marcus Dillavou  <marcus.dillavou@helplightning.com>
+	* TER-11 - Changes for AWS provider version 4 upgrade
+
 4.0.0
 ==========
 2023-08-01  Rob Hargraves <rob.hargraves@helplightning.com> - Merged by Marcus Dillavou  <marcus.dillavou@helplightning.com>

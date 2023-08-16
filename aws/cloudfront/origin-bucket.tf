@@ -2,11 +2,6 @@ resource "aws_s3_bucket" "origin" {
   bucket = local.bucket_name
   lifecycle {
     prevent_destroy = true
-    ignore_changes = [
-      logging,
-      server_side_encryption_configuration,
-      cors_rule,
-    ]
   }
   tags = local.tags
 }
