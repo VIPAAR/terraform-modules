@@ -12,33 +12,33 @@ data "aws_iam_policy_document" "assume_role_policy" {
   }
 }
 
-resource "aws_iam_role" "launch_config" {
+resource "aws_iam_role" "launch_template" {
   assume_role_policy = data.aws_iam_policy_document.assume_role_policy.json
   name               = var.name
 }
 
 resource "aws_iam_role_policy_attachment" "cloudwatch_logs" {
   policy_arn = "arn:aws:iam::aws:policy/AWSOpsWorksCloudWatchLogs"
-  role       = aws_iam_role.launch_config.name
+  role       = aws_iam_role.launch_template.name
 }
 
 resource "aws_iam_role_policy_attachment" "ssm" {
   policy_arn = "arn:aws:iam::aws:policy/service-role/AmazonEC2RoleforSSM"
-  role       = aws_iam_role.launch_config.name
+  role       = aws_iam_role.launch_template.name
 }
 
 resource "aws_iam_role_policy_attachment" "managed_policy" {
   count      = local.policy_arns_count
   policy_arn = var.policy_arns[count.index]
-  role       = aws_iam_role.launch_config.name
+  role       = aws_iam_role.launch_template.name
 }
 
-resource "aws_iam_instance_profile" "launch_config" {
+resource "aws_iam_instance_profile" "launch_template" {
   name = var.name
-  role = aws_iam_role.launch_config.name
+  role = aws_iam_role.launch_template.name
 }
 
-resource "aws_launch_configuration" "launch_config" {
+resource "aws_launch_configuration" "launch_template" {
   associate_public_ip_address = var.associate_public_ip_address
   dynamic "ebs_block_device" {
     for_each = var.ebs_block_devices
@@ -62,7 +62,7 @@ resource "aws_launch_configuration" "launch_config" {
       virtual_name = ephemeral_block_device.value.virtual_name
     }
   }
-  iam_instance_profile = aws_iam_instance_profile.launch_config.name
+  iam_instance_profile = aws_iam_instance_profile.launch_template.name
   image_id             = var.image_id
   instance_type        = var.instance_type
   key_name             = var.key_name
