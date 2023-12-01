@@ -38,46 +38,48 @@ resource "aws_iam_instance_profile" "launch_template" {
   role = aws_iam_role.launch_template.name
 }
 
-resource "aws_launch_configuration" "launch_template" {
-  associate_public_ip_address = var.associate_public_ip_address
-  dynamic "ebs_block_device" {
-    for_each = var.ebs_block_devices
+resource "aws_launch_template" "launch_template" {
+  name                   = var.name
+  ebs_optimized          = contains(local.ebs_optimized_instance_types, var.instance_type)
+  image_id               = var.image_id
+  instance_type          = var.instance_type
+  key_name               = var.key_name
+  tenancy                = var.tenancy
+  user_data              = base64encode(var.user_data)
+  vpc_security_group_ids = var.security_groups
+
+  dynamic "block_device_mappings" {
+    for_each = var.block_device_mappings
     content {
-      delete_on_termination = lookup(ebs_block_device.value, "delete_on_termination", null)
-      device_name           = ebs_block_device.value.device_name
-      encrypted             = lookup(ebs_block_device.value, "encrypted", null)
-      iops                  = lookup(ebs_block_device.value, "iops", null)
-      no_device             = lookup(ebs_block_device.value, "no_device", null)
-      snapshot_id           = lookup(ebs_block_device.value, "snapshot_id", null)
-      volume_size           = lookup(ebs_block_device.value, "volume_size", null)
-      volume_type           = lookup(ebs_block_device.value, "volume_type", null)
+      device_name  = lookup(block_device_mappings.value, "device_name", null)
+      no_device    = lookup(block_device_mappings.value, "no_device", null)
+      virtual_name = lookup(block_device_mappings.value, "virtual_name", null)
+
+      dynamic "ebs" {
+        for_each = lookup(block_device_mappings.value, "ebs", null) == null ? [] : ["ebs"]
+        content {
+          delete_on_termination = lookup(block_device_mappings.value.ebs, "delete_on_termination", null)
+          encrypted             = lookup(block_device_mappings.value.ebs, "encrypted", null)
+          iops                  = lookup(block_device_mappings.value.ebs, "iops", null)
+          throughput            = lookup(block_device_mappings.value.ebs, "throughput", null)
+          kms_key_id            = lookup(block_device_mappings.value.ebs, "kms_key_id", null)
+          snapshot_id           = lookup(block_device_mappings.value.ebs, "snapshot_id", null)
+          volume_size           = lookup(block_device_mappings.value.ebs, "volume_size", null)
+          volume_type           = lookup(block_device_mappings.value.ebs, "volume_type", null)
+        }
+      }
     }
   }
-  ebs_optimized     = contains(local.ebs_optimized_instance_types, var.instance_type)
-  enable_monitoring = true
-  dynamic "ephemeral_block_device" {
-    for_each = var.ephemeral_block_devices
-    content {
-      device_name  = ephemeral_block_device.value.device_name
-      virtual_name = ephemeral_block_device.value.virtual_name
-    }
+
+  iam_instance_profile {
+    name = aws_iam_instance_profile.launch_template.name
   }
-  iam_instance_profile = aws_iam_instance_profile.launch_template.name
-  image_id             = var.image_id
-  instance_type        = var.instance_type
-  key_name             = var.key_name
-  lifecycle {
-    create_before_destroy = true
+
+  monitoring {
+    enabled = true
   }
-  name_prefix       = var.name
-  placement_tenancy = var.placement_tenancy
-  root_block_device {
-    delete_on_termination = lookup(var.root_block_device, "delete_on_termination", null)
-    encrypted             = lookup(var.root_block_device, "encrypted", null)
-    iops                  = lookup(var.root_block_device, "iops", null)
-    volume_size           = lookup(var.root_block_device, "volume_size", null)
-    volume_type           = lookup(var.root_block_device, "volume_type", null)
+
+  network_interfaces {
+    associate_public_ip_address = var.associate_public_ip_address
   }
-  security_groups = var.security_groups
-  user_data       = var.user_data
 }

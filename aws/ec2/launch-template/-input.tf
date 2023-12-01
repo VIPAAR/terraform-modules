@@ -3,14 +3,24 @@ variable "associate_public_ip_address" {
   type    = string
 }
 
-variable "ebs_block_devices" {
-  default = []
-  type    = list(string)
-}
+variable "block_device_mappings" {
+  type = list(object({
+    device_name  = optional(string)
+    no_device    = optional(bool)
+    virtual_name = optional(string)
+    ebs = object({
+      delete_on_termination = optional(bool)
+      encrypted             = optional(bool)
+      iops                  = optional(number)
+      throughput            = optional(number)
+      kms_key_id            = optional(string)
+      snapshot_id           = optional(string)
+      volume_size           = optional(number)
+      volume_type           = optional(string)
+    })
+  }))
 
-variable "ephemeral_block_devices" {
   default = []
-  type    = list(string)
 }
 
 variable "image_id" {
@@ -30,7 +40,7 @@ variable "name" {
   type = string
 }
 
-variable "placement_tenancy" {
+variable "tenancy" {
   default = "default"
   type    = string
 }
@@ -43,11 +53,6 @@ variable "policy_arns" {
 variable "policy_arns_count" {
   default = 0
   type    = string
-}
-
-variable "root_block_device" {
-  default = {}
-  type    = map(string)
 }
 
 variable "security_groups" {
