@@ -45,7 +45,6 @@ resource "aws_launch_template" "launch_template" {
   instance_type          = var.instance_type
   key_name               = var.key_name
   user_data              = base64encode(var.user_data)
-  vpc_security_group_ids = var.security_groups
 
   dynamic "block_device_mappings" {
     for_each = var.block_device_mappings
@@ -80,6 +79,7 @@ resource "aws_launch_template" "launch_template" {
 
   network_interfaces {
     associate_public_ip_address = var.associate_public_ip_address
+    security_groups             = var.security_groups
   }
 
   placement {
