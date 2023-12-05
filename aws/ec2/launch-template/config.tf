@@ -44,7 +44,6 @@ resource "aws_launch_template" "launch_template" {
   image_id               = var.image_id
   instance_type          = var.instance_type
   key_name               = var.key_name
-  tenancy                = var.tenancy
   user_data              = base64encode(var.user_data)
   vpc_security_group_ids = var.security_groups
 
@@ -81,5 +80,9 @@ resource "aws_launch_template" "launch_template" {
 
   network_interfaces {
     associate_public_ip_address = var.associate_public_ip_address
+  }
+
+  placement {
+    tenancy = var.tenancy
   }
 }
