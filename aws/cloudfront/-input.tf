@@ -64,6 +64,11 @@ variable "price_class" {
   type    = string
 }
 
+variable "response_headers_policy_id" {
+  default = null
+  type    = string
+}
+
 variable "tags" {
   default = {}
   type    = map(string)
