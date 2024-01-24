@@ -1,4 +1,5 @@
 2024-01-24  Rob Hargraves <rob.hargraves@helplightning.com> - Merged by Marcus Dillavou  <marcus.dillavou@helplightning.com>
+	* TER-16 - Allow a custom reponse headers policy
 	* TER-15 - Write a launch template module
 
 6.0.0

@@ -39,10 +39,11 @@ resource "aws_cloudfront_distribution" "distribution" {
       event_type = "origin-request"
       lambda_arn = aws_lambda_function.redirector.qualified_arn
     }
-    max_ttl                = 86400
-    min_ttl                = 0
-    target_origin_id       = var.distribution_name
-    viewer_protocol_policy = "redirect-to-https"
+    max_ttl                    = 86400
+    min_ttl                    = 0
+    response_headers_policy_id = var.response_headers_policy_id
+    target_origin_id           = var.distribution_name
+    viewer_protocol_policy     = "redirect-to-https"
   }
   default_root_object = var.default_root_object
   depends_on          = [aws_lambda_permission.redirector]
@@ -56,18 +57,19 @@ resource "aws_cloudfront_distribution" "distribution" {
   dynamic "ordered_cache_behavior" {
     for_each = var.ordered_cache_behaviors
     content {
-      allowed_methods           = ordered_cache_behavior.value.allowed_methods
-      cached_methods            = ordered_cache_behavior.value.cached_methods
-      compress                  = lookup(ordered_cache_behavior.value, "compress", null)
-      default_ttl               = lookup(ordered_cache_behavior.value, "default_ttl", null)
-      field_level_encryption_id = lookup(ordered_cache_behavior.value, "field_level_encryption_id", null)
-      max_ttl                   = lookup(ordered_cache_behavior.value, "max_ttl", null)
-      min_ttl                   = lookup(ordered_cache_behavior.value, "min_ttl", null)
-      path_pattern              = ordered_cache_behavior.value.path_pattern
-      smooth_streaming          = lookup(ordered_cache_behavior.value, "smooth_streaming", null)
-      target_origin_id          = ordered_cache_behavior.value.target_origin_id
-      trusted_signers           = lookup(ordered_cache_behavior.value, "trusted_signers", null)
-      viewer_protocol_policy    = ordered_cache_behavior.value.viewer_protocol_policy
+      allowed_methods            = ordered_cache_behavior.value.allowed_methods
+      cached_methods             = ordered_cache_behavior.value.cached_methods
+      compress                   = lookup(ordered_cache_behavior.value, "compress", null)
+      default_ttl                = lookup(ordered_cache_behavior.value, "default_ttl", null)
+      field_level_encryption_id  = lookup(ordered_cache_behavior.value, "field_level_encryption_id", null)
+      max_ttl                    = lookup(ordered_cache_behavior.value, "max_ttl", null)
+      min_ttl                    = lookup(ordered_cache_behavior.value, "min_ttl", null)
+      path_pattern               = ordered_cache_behavior.value.path_pattern
+      response_headers_policy_id = lookup(ordered_cache_behavior.value, "response_headers_policy_id", null)
+      smooth_streaming           = lookup(ordered_cache_behavior.value, "smooth_streaming", null)
+      target_origin_id           = ordered_cache_behavior.value.target_origin_id
+      trusted_signers            = lookup(ordered_cache_behavior.value, "trusted_signers", null)
+      viewer_protocol_policy     = ordered_cache_behavior.value.viewer_protocol_policy
 
       dynamic "forwarded_values" {
         for_each = lookup(ordered_cache_behavior.value, "forwarded_values", [])
