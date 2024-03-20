@@ -116,6 +116,7 @@ resource "aws_db_instance" "rds" {
   auto_minor_version_upgrade  = var.auto_minor_version_upgrade
   backup_retention_period     = 7
   backup_window               = "05:00-05:30"
+  ca_cert_identifier          = var.ca_cert_identifier
   copy_tags_to_snapshot       = true
   db_name                     = var.database_name
   db_subnet_group_name        = aws_db_subnet_group.rds.name

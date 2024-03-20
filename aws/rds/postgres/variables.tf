@@ -16,6 +16,12 @@ variable "auto_minor_version_upgrade" {
   type        = bool
 }
 
+variable "ca_cert_identifier" {
+  default     = null
+  description = "The identifier of the CA certificate for the DB instance."
+  type        = string
+}
+
 variable "database_name" {
   description = "The name of the database to create when the DB instance is created."
   type        = string
