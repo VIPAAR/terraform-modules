@@ -69,14 +69,17 @@ data "aws_iam_policy_document" "enforce_mfa" {
     }
     effect = "Deny"
     not_actions = [
-      "iam:*LoginProfile",
-      "iam:*MFADevice",
+      "iam:CreateVirtualMFADevice",
+      "iam:EnableMFADevice",
+      "iam:GetMFADevice",
+      "iam:ResyncMFADevice",
       "iam:ChangePassword",
       "iam:GetAccountPasswordPolicy",
       "iam:GetAccountSummary",
       "iam:List*MFADevices",
       "iam:ListAccountAliases",
       "iam:ListUsers",
+      "iam:GetUser",
     ]
     resources = [
       "*",
