@@ -20,13 +20,25 @@ data "aws_iam_policy_document" "user_profile_self_service" {
 
   statement {
     actions = [
-      "iam:*MFADevice",
+      "iam:CreateVirtualMFADevice",
     ]
     resources = [
-      "arn:aws:iam::${data.aws_caller_identity.current.account_id}:mfa/${var.name}",
+      "arn:aws:iam::*:mfa/*",
+    ]
+    sid = "AllowUserToCreateMFADevices"
+  }
+
+  statement {
+    actions = [
+      "iam:DeactivateMFADevice",
+      "iam:EnableMFADevice",
+      "iam:ListMFADevices",
+      "iam:ResyncMFADevice"
+    ]
+    resources = [
       aws_iam_user.user.arn,
     ]
-    sid = "AllowIndividualUserToManageThierMFA"
+    sid = "AllowIndividualUserToManageTheirMFA"
   }
 
   statement {
@@ -98,12 +110,14 @@ data "aws_iam_policy_document" "enforce_mfa" {
     effect = "Deny"
     actions = [
       "iam:*LoginProfile",
-      "iam:*MFADevice",
+      "iam:EnableMFADevice",
+      "iam:GetMFADevice",
+      "iam:ResyncMFADevice",
+      "iam:ListMFADevices",
       "iam:ChangePassword",
       "iam:GetAccountSummary",
     ]
     not_resources = [
-      "arn:aws:iam::${data.aws_caller_identity.current.account_id}:mfa/${var.name}",
       aws_iam_user.user.arn,
     ]
     sid = "DenyIamAccessToOtherAccountsUnlessMFAd"
