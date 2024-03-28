@@ -109,7 +109,6 @@ data "aws_iam_policy_document" "enforce_mfa" {
     }
     effect = "Deny"
     actions = [
-      "iam:*LoginProfile",
       "iam:EnableMFADevice",
       "iam:GetMFADevice",
       "iam:ResyncMFADevice",
