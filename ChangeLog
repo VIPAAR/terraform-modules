@@ -1,4 +1,5 @@
 2024-06-17  Rob Hargraves <rob.hargraves@helplightning.com> - Merged by Marcus Dillavou  <marcus.dillavou@helplightning.com>
+	* TER-20 - Fix the "deny" IAM policy for AWS users not authenticated with MFA
 	* TER-17 - aws/rds/postgres: make the CA certificate configurable
 
 6.2.0
