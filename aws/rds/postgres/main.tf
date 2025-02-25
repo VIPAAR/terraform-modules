@@ -110,7 +110,7 @@ resource "aws_iam_role_policy_attachment" "monitoring" {
 }
 
 resource "aws_db_instance" "rds" {
-  allocated_storage           = 100
+  allocated_storage           = var.allocated_storage
   allow_major_version_upgrade = var.allow_major_version_upgrade
   apply_immediately           = var.apply_immediately
   auto_minor_version_upgrade  = var.auto_minor_version_upgrade
@@ -129,6 +129,7 @@ resource "aws_db_instance" "rds" {
   lifecycle {
     prevent_destroy = true
   }
+  max_allocated_storage                 = var.max_allocated_storage
   monitoring_interval                   = 60
   monitoring_role_arn                   = aws_iam_role.monitoring.arn
   multi_az                              = true
