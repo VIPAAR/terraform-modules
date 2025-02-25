@@ -16,6 +16,12 @@ variable "auto_minor_version_upgrade" {
   type        = bool
 }
 
+variable "blue_green_update_enabled" {
+  default     = true
+  description = "Whether to perform database updates using a blue/green deployment."
+  type        = bool
+}
+
 variable "ca_cert_identifier" {
   default     = null
   description = "The identifier of the CA certificate for the DB instance."

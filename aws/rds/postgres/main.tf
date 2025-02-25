@@ -116,6 +116,9 @@ resource "aws_db_instance" "rds" {
   auto_minor_version_upgrade  = var.auto_minor_version_upgrade
   backup_retention_period     = 7
   backup_window               = "05:00-05:30"
+  blue_green_update {
+    enabled = var.blue_green_update_enabled
+  }
   ca_cert_identifier          = var.ca_cert_identifier
   copy_tags_to_snapshot       = true
   db_name                     = var.database_name
