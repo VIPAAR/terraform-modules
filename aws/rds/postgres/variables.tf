@@ -4,6 +4,12 @@ variable "allow_major_version_upgrade" {
   type        = bool
 }
 
+variable "allocated_storage" {
+  default     = 100
+  description = "The allocated storage (in GiB)."
+  type        = number
+}
+
 variable "apply_immediately" {
   default     = false
   description = "Changes to some db settings can be deferred until the next maintenance window. Setting this to true will instead apply the planned changes immediately."
@@ -48,6 +54,12 @@ variable "instance_name" {
   default     = ""
   description = "The name of the instance to be created, if different than name."
   type        = string
+}
+
+variable "max_allocated_storage" {
+  default     = null
+  description = "Specifies the maximum storage (in GiB) that Amazon RDS can automatically scale to. By default, Storage Autoscaling is disabled. Must be greater than allocated_storage."
+  type        = number
 }
 
 variable "name" {
