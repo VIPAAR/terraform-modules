@@ -99,7 +99,7 @@ resource "aws_cloudfront_distribution" "distribution" {
     }
   }
   origin {
-    domain_name = aws_s3_bucket.origin.bucket_domain_name
+    domain_name = aws_s3_bucket.origin.bucket_regional_domain_name
     origin_id   = var.distribution_name
     s3_origin_config {
       origin_access_identity = aws_cloudfront_origin_access_identity.origin.cloudfront_access_identity_path
