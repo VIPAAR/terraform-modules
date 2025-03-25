@@ -1,4 +1,5 @@
 2025-03-25  Rob Hargraves <rob.hargraves@helplightning.com> - Merged by Marcus Dillavou  <marcus.dillavou@helplightning.com>
+	* TER-22 - Add option for storage autoscaling in postgres
 	* TER-21 - Add option for Blue/Green updates for postgres database
 
 6.4.0
