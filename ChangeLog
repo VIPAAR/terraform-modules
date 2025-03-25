@@ -1,3 +1,5 @@
+6.6.0
+==========
 2025-03-25  Rob Hargraves <rob.hargraves@helplightning.com> - Merged by Marcus Dillavou  <marcus.dillavou@helplightning.com>
 	* TER-23 - Use the region-specific S3 endpoint in the cloudfront module
 	* TER-22 - Add option for storage autoscaling in postgres
