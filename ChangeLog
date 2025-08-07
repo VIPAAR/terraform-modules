@@ -1,3 +1,5 @@
+6.8.0
+==========
 2025-08-07  Rob Hargraves <rob.hargraves@helplightning.com> - Merged by Marcus Dillavou  <marcus.dillavou@helplightning.com>
 	* TER-25 - Replace AmazonEC2RoleforSSM IAM policy with AmazonSSMManagedInstanceCore IAM policy
 
