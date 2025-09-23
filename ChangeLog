@@ -1,3 +1,5 @@
+6.10.0
+==========
 2025-09-23  Rob Hargraves <rob.hargraves@helplightning.com> - Merged by Rob Hargraves <rob.hargraves@helplightning.com>
 	* TER-27 - cloudfront: update lambda edge function to the latest node.js
 
