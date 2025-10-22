@@ -39,6 +39,14 @@ resource "aws_cloudfront_distribution" "distribution" {
       event_type = "origin-request"
       lambda_arn = aws_lambda_function.redirector.qualified_arn
     }
+    dynamic "lambda_function_association" {
+      for_each = var.default_lambda_function_associations
+      content {
+        event_type   = lambda_function_association.value.event_type
+        include_body = lookup(lambda_function_association.value, "include_body", null)
+        lambda_arn   = lambda_function_association.value.lambda_arn
+      }
+    }
     max_ttl                    = 86400
     min_ttl                    = 0
     response_headers_policy_id = var.response_headers_policy_id

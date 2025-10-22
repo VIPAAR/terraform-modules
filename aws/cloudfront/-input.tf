@@ -69,6 +69,15 @@ variable "response_headers_policy_id" {
   type    = string
 }
 
+variable "default_lambda_function_associations" {
+  default = []
+  type = list(object({
+    event_type   = string
+    lambda_arn   = string
+    include_body = optional(bool)
+  }))
+}
+
 variable "tags" {
   default = {}
   type    = map(string)
