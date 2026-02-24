@@ -13,11 +13,6 @@ data "aws_iam_policy_document" "redirector_assume_role" {
   }
 }
 
-provider "aws" {
-  alias  = "lambda_edge_region"
-  region = "us-east-1"
-}
-
 resource "aws_iam_role" "redirector" {
   assume_role_policy = data.aws_iam_policy_document.redirector_assume_role.json
   name               = "${var.distribution_name}-default-index-redirector"
