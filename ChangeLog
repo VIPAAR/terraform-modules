@@ -1,3 +1,5 @@
+7.0.0
+==========
 2026-02-24  Rob Hargraves <rob.hargraves@helplightning.com> - Merged by Rob Hargraves <rob.hargraves@helplightning.com>
 	* TER-30 - cloudfront: remove the included AWS provider for us-east-1
 
