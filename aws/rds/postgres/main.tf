@@ -121,6 +121,7 @@ resource "aws_db_instance" "rds" {
   }
   ca_cert_identifier          = var.ca_cert_identifier
   copy_tags_to_snapshot       = true
+  database_insights_mode      = var.database_insights_mode
   db_name                     = var.database_name
   db_subnet_group_name        = aws_db_subnet_group.rds.name
   engine                      = "postgres"

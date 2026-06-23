@@ -34,6 +34,16 @@ variable "ca_cert_identifier" {
   type        = string
 }
 
+variable "database_insights_mode" {
+  default     = null
+  description = "The mode of Database Insights to enable. Valid values are 'standard' or 'advanced'. When null, the attribute is omitted and AWS defaults apply."
+  type        = string
+  validation {
+    condition     = var.database_insights_mode == null ? true : contains(["standard", "advanced"], var.database_insights_mode)
+    error_message = "Valid values for database_insights_mode are 'standard', 'advanced', or null."
+  }
+}
+
 variable "database_name" {
   description = "The name of the database to create when the DB instance is created."
   type        = string
@@ -81,11 +91,17 @@ variable "performance_insights_enabled" {
 
 variable "performance_insights_retention_period" {
   default     = 7
-  description = "The amount of time in days to retain Performance Insights data. Either 7 (7 days) or 731 (2 years)."
+  description = "The amount of time in days to retain Performance Insights data. Valid values are 7 (7 days), 465 (15 months, minimum for advanced Database Insights), or 731 (2 years)."
   type        = number
   validation {
-    condition     = contains([7, 731], var.performance_insights_retention_period)
-    error_message = "Valid choices for Performance Insights retention period are 7 (7 days) or 731 (2 years)."
+    condition     = contains([7, 465, 731], var.performance_insights_retention_period)
+    error_message = "Valid choices for Performance Insights retention period are 7 (7 days), 465 (15 months), or 731 (2 years)."
+  }
+  validation {
+    condition = var.database_insights_mode != "advanced" ? true : (
+      var.performance_insights_enabled && var.performance_insights_retention_period >= 465
+    )
+    error_message = "Advanced Database Insights requires Performance Insights enabled with retention >= 465 days."
   }
 }
 
