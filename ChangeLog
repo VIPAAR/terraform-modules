@@ -1,3 +1,6 @@
+2026-07-09  Rob Hargraves <rob.hargraves@helplightning.com> - Merged by Rob Hargraves <rob.hargraves@helplightning.com>
+	* TER-31 - Add the option to enable Database Insights in the rds module
+
 7.0.0
 ==========
 2026-02-24  Rob Hargraves <rob.hargraves@helplightning.com> - Merged by Rob Hargraves <rob.hargraves@helplightning.com>
